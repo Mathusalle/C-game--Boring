@@ -1,0 +1,134 @@
+using System;
+
+class Program
+{
+    // Player data
+    static int playerHealth = 3;
+    static int playerAttack = 1;
+    static int playerDefense = 1;
+    static int playerX = 10;
+    static int playerY = 10;
+
+    // Enemy data
+    static int enemyHealth = 3;
+    static int enemyAttack = 1;
+    static int enemyX = 20;
+    static int enemyY = 20;
+
+    // Boss data
+    static int bossHealth = 10;
+    static int bossAttack = 2;
+    static int bossDefense = 2;
+    static int bossX = 30;
+    static int bossY = 30;
+    static bool bossEncounter = false;
+
+    // Item data
+    static int keyCount = 0;
+    static int bombCount = 0;
+
+    // Puzzles and secrets
+    static bool puzzle1Solved = false;
+    static bool puzzle2Solved = false;
+    static bool secret1Found = false;
+    static bool secret2Found = false;
+
+    static void Attack(int attacker, ref int defender, int defense)
+    {
+        int damage = attacker > defense ? attacker - defense : 0;
+        defender -= damage;
+        if (defender <= 0)
+        {
+            // Enemy defeated
+            Console.WriteLine("You have defeated the enemy!");
+            if (bossEncounter)
+            {
+                // Boss defeated
+                Console.WriteLine("You have saved the kingdom from the evil robots!");
+            }
+        }
+        else
+        {
+            // Enemy still has health
+            Console.WriteLine("Enemy has {defender} health remaining.");
+            if (enemyHealth > 0 && new Random().Next(2) == 0)
+            {
+                // Enemy attacks back
+                Console.WriteLine("Enemy attacks!");
+                Attack(enemyAttack, ref playerHealth, playerDefense);
+            }
+        }
+    }
+
+    static void UseKey()
+    {
+        if (keyCount > 0)
+        {
+            Console.WriteLine("You unlock the door.");
+            keyCount--;
+            // TODO: Open the door
+        }
+        else
+        {
+            Console.WriteLine("You need a key to unlock this door.");
+        }
+    }
+
+    static void UseBomb()
+    {
+        if (bombCount > 0)
+        {
+            Console.WriteLine("You use a bomb and blow up the wall.");
+            bombCount--;
+            // TODO: Open the secret passage
+        }
+        else
+        {
+            Console.WriteLine("You don't have any bombs.");
+        }
+    }
+
+    static void Main(string[] args)
+    {
+        Console.WriteLine("Welcome to Legend of the Robo-Knight!");
+
+        while (playerHealth > 0)
+        {
+            // Move player around the world
+            // TODO: Implement player movement
+
+            // Check for encounters
+            if (playerX == enemyX && playerY == enemyY && enemyHealth > 0)
+            {
+                // Enemy encounter
+                Console.WriteLine("You encounter an enemy!");
+                while (playerHealth > 0 && enemyHealth > 0)
+                {
+                    // Player attacks first
+                    Attack(playerAttack, ref enemyHealth, 0);
+                }
+            }
+            else if (playerX == bossX && playerY == bossY && !bossEncounter)
+            {
+                // Boss encounter
+                Console.WriteLine("You have entered the robot factory!");
+                Console.WriteLine("The evil robot king appears!");
+                bossEncounter = true;
+                while (playerHealth > 0 && bossHealth > 0)
+                {
+                    // Player attacks first
+                    Attack(playerAttack, ref bossHealth, bossDefense);
+                }
+            }
+
+            // Check for items and secrets
+            // TODO: Implement item and secret handling
+
+            // Check for puzzles
+            if (!puzzle1Solved && puzzle1Solved)
+            {
+                // TODO: Implement puzzle 1
+            }
+        }
+    }
+}
